@@ -1,0 +1,42 @@
+<include file="public@header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:url('admin_holiday/index')}">节日管理</a></li>
+			<li><a href="{:url('admin_holiday/holidayAdd')}">添加节日</a></li>
+		</ul>
+		<form method="post" class="margin-top-20">
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th width="200">日期</th>
+                        <th align="left">状态</th>
+						<th width="160">{:lang('ACTIONS')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<foreach name="holidays" item="vo">
+					<tr>
+						<td>{:date('Y-m-d', $vo.dt)}</td>
+						<td>
+							<if condition="$vo['date_status'] eq 1">
+								<span class="label label-success">休息日</span>
+							<else />
+								<span class="label label-danger">工作日</span>
+							</if>
+                        </td>
+						<td>
+                            <a class="btn btn-xs btn-primary" href="{:url('admin_holiday/holidayedit',array('dt'=>$vo['dt']))}">{:lang('EDIT')}</a>
+                            <a class="btn btn-xs btn-danger js-ajax-delete" class="" href="{:url('admin_holiday/holidaydelete',array('dt'=>$vo['dt']))}">{:lang('DELETE')}</a>
+						</td>
+					</tr>
+					</foreach>
+				</tbody>
+			</table>
+			<div class="pagination">{$page}</div>
+		</form>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('admin_holiday/index')}">节日管理</a></li>
+        <li><a href="{:url('admin_holiday/holidayadd')}">添加节日</a></li>
+        <li class="active"><a>编辑节日</a></li>
+    </ul>
+    <form class="form-horizontal js-ajax-form margin-top-20" action="{:url('admin_holiday/holidayEditPost')}" method="post">
+        <div class="form-group">
+            <label for="input-dt" class="col-sm-2 control-label"><span class="form-required">*</span>节日日期</label>
+            <div class="col-md-6 col-sm-10">
+                <input class="form-control" type="text" id="input-dt" name="dt" value="{:date('Y-m-d', $data.dt)}" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>日期状态</label>
+            <div class="col-md-6 col-sm-10">
+                <label class="radio-inline">
+                    <php>$date_status_true_checked=($data['date_status']==1)?"checked":"";</php>
+                    <input type="radio" name="date_status" value="1" {$date_status_true_checked}> 休息日
+                </label>
+                <label class="radio-inline">
+                    <php>$date_status_false_checked=($data['date_status']==0)?"checked":"";</php>
+                    <input type="radio" name="date_status" value="0" {$date_status_false_checked}> 工作日
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
+                <a class="btn btn-default" href="{:url('admin_holiday/index')}">{:lang('BACK')}</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

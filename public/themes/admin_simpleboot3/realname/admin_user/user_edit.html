@@ -1,0 +1,59 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('admin_user/userIndex')}">实名用户管理</a></li>
+        <li class="active"><a>编辑实名用户</a></li>
+    </ul>
+    <form class="form-horizontal js-ajax-form margin-top-20" action="{:url('admin_user/userEditPost')}" method="post">
+        <div class="form-group">
+            <label for="input-app-name" class="col-sm-2 control-label">应用名称</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-app-name" name="app_name" value="{$app.app_name}" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-uid" class="col-sm-2 control-label">帐号ID</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-uid" name="uid" value="{$data.uid}" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-real-name" class="col-sm-2 control-label"><span class="form-required">*</span>姓名</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-real-name" name="real_name" value="{$data.real_name}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-idcard" class="col-sm-2 control-label"><span class="form-required">*</span>身份证</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-idcard" name="idcard" value="{$data.idcard}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-online-time" class="col-sm-2 control-label"><span class="form-required">*</span>在线时长</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-online-time" name="online_time" value="{$data.online_time}">
+                <p class="help-block">单位(秒)</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-pay-monthly" class="col-sm-2 control-label"><span class="form-required">*</span>累计充值</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-pay-monthly" name="pay_monthly" value="{$data.pay_monthly}">
+                <p class="help-block">单位(元)</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="hidden" name="app_id" value="{$data.app_id}"/>
+                <button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
+                <a class="btn btn-default" href="{:url('admin_user/userIndex')}">{:lang('BACK')}</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

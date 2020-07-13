@@ -1,0 +1,107 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('admin_app/index')}">应用管理</a></li>
+        <li><a href="{:url('admin_app/appadd')}">添加应用</a></li>
+        <li class="active"><a>编辑应用</a></li>
+    </ul>
+    <form class="form-horizontal js-ajax-form margin-top-20" action="{:url('admin_app/appEditPost')}" method="post">
+        <div class="form-group">
+            <label for="input-app-name" class="col-sm-2 control-label"><span class="form-required">*</span>应用名称</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-app-name" name="app_name" value="{$data.app_name}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-app-secret" class="col-sm-2 control-label"><span class="form-required">*</span>App Secret</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-app-secret" name="app_secret" value="{$data.app_secret}" readonly="readonly">
+                <p class="help-block"><a class="btn btn-warning" href="javascript:setInputRandomStr('input-app-secret', 16);">重新生成</a></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-app-icon" class="col-sm-2 control-label">应用图标</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-app-icon" name="app_icon" value="{$data.app_icon}" readonly="readonly"> 
+                <p class="help-block"><a href="javascript:uploadOneImage('图片上传','#input-app-icon');">上传图标</a>&nbsp;&nbsp;&nbsp;&nbsp;建议格式: 带透明图层的PNG，建议尺寸：200x200px</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>实名认证状态</label>
+            <div class="col-md-6 col-sm-10">
+                <label class="radio-inline">
+                    <php>$realname_status_true_checked=($data['realname_status']==1)?"checked":"";</php>
+                    <input type="radio" name="realname_status" value="1" {$realname_status_true_checked}> {:lang('ENABLED')}
+                </label>
+                <label class="radio-inline">
+                    <php>$realname_status_false_checked=($data['realname_status']==0)?"checked":"";</php>
+                    <input type="radio" name="realname_status" value="0" {$realname_status_false_checked}> {:lang('DISABLED')}
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>防沉迷状态</label>
+            <div class="col-md-6 col-sm-10">
+                <label class="radio-inline">
+                    <php>$fatigue_status_true_checked=($data['fatigue_status']==1)?"checked":"";</php>
+                    <input type="radio" name="fatigue_status" value="1" {$fatigue_status_true_checked}> {:lang('ENABLED')}
+                </label>
+                <label class="radio-inline">
+                    <php>$fatigue_status_false_checked=($data['fatigue_status']==0)?"checked":"";</php>
+                    <input type="radio" name="fatigue_status" value="0" {$fatigue_status_false_checked}> {:lang('DISABLED')}
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>充值统计方式</label>
+            <div class="col-md-6 col-sm-10">
+                <label class="radio-inline">
+                    <php>$recharge_status_true_checked=($data['recharge_status']==1)?"checked":"";</php>
+                    <input type="radio" name="recharge_status" value="1" {$recharge_status_true_checked}> 服务器查询
+                </label>
+                <label class="radio-inline">
+                    <php>$recharge_status_false_checked=($data['recharge_status']==0)?"checked":"";</php>
+                    <input type="radio" name="recharge_status" value="0" {$recharge_status_false_checked}> 客户端上报
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-recharge-query-url" class="col-sm-2 control-label">游戏充值查询地址</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-recharge-query-url" name="recharge_query_url" value="{$data.recharge_query_url}">
+                <p class="help-block">当充值统计方式为服务端查询时，此输入框必填</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="hidden" name="app_id" value="{$data.app_id}"/>
+                <button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
+                <a class="btn btn-default" href="{:url('admin_app/index')}">{:lang('BACK')}</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+/**
+生成随机字符串
+*/
+var createRandomStr = function(len) {
+    var str = '';
+    var j = 0;
+    var char = 'ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+    for (var i = 0; i < parseInt(len); i++) {
+        j = Math.floor(Math.random() * char.length);
+        str += char.charAt(j);
+    }
+    return str;
+};
+
+var setInputRandomStr = function(id, len) {
+    $('#' + id).val(createRandomStr(len));
+};
+</script>
+</body>
+</html>

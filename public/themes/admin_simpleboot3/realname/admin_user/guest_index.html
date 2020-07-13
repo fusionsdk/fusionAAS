@@ -1,0 +1,96 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a>游客管理</a></li>
+    </ul>
+    <form class="well form-inline margin-top-20" method="post" action="{:url('admin_user/guestIndex')}">
+        帐号ID：
+        <input class="form-control" type="text" name="uid" style="width: 200px;" value="{:input('request.uid')}"
+               placeholder="请输入帐号ID">
+        应用：
+        <select class="form-control" name="app_id" style="width: 200px;">
+            <option value="">--- 所有 ---</option>
+            <foreach name="apps" item="vo">
+                <php>$app_selected = input('request.app_id') == $vo['app_id'] ? "selected" : "";</php>
+                <option value="{$vo.app_id}" {$app_selected}>{$vo.app_name}</option>
+            </foreach>
+        </select>
+        <input type="submit" class="btn btn-primary" value="搜索"/>
+    </form>
+    <form method="post" class="js-ajax-form">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>应用</th>
+                <th>帐号ID</th>
+                <th>创建时间</th>
+                <th>最新连接时间</th>
+                <th>最新登录设备号</th>
+                <th>设备首次体验时间</th>
+                <th>设备可再次体验时间</th>
+                <th>累计在线时长</th>
+                <th>状态</th>
+                <th width="140">{:lang('ACTIONS')}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <foreach name="users" item="vo">
+                <tr>
+                    <td>
+                        <php>$app_name = $vo['app_name'] == '' ? $vo['app_id'] : $vo['app_name'];</php>
+                        <small>{$app_name}</small>
+                    </td>
+                    <td><small>{$vo.uid}</small></td>
+                    <td>
+                        <small>{:date('Y-m-d H:i:s',$vo['create_time'])}</small>
+                        <php>if (date('Y-m-d') == date('Y-m-d',$vo['create_time'])) echo ' <span class="badge" style="background-color:#E74C3C;">今</span>';</php>
+                    </td>
+                    <td>
+                        <small>{:date('Y-m-d H:i:s',$vo['update_time'])}</small>
+                        <php>if (date('Y-m-d') == date('Y-m-d',$vo['update_time'])) echo ' <span class="badge" style="background-color:#E74C3C;">今</span>';</php>
+                    </td>
+                    <td><small>{$vo.device_id}</small></td>
+                    <td>
+                        <small>{:date('Y-m-d H:i:s',$vo['ctime'])}</small>
+                        <php>if (date('Y-m-d') == date('Y-m-d',$vo['ctime'])) echo ' <span class="badge" style="background-color:#E74C3C;">今</span>';</php>
+                    </td>
+                    <td>
+                        <small>{:date('Y-m-d H:i:s',intval($vo['utime'])+intval(cmf_get_option('realname_settings')['guest_replay_limit']))}</small>
+                        <php>if (date('Y-m-d') == date('Y-m-d',intval($vo['utime'])+intval(cmf_get_option('realname_settings')['guest_replay_limit']))) echo ' <span class="badge" style="background-color:#E74C3C;">今</span>';</php>
+                    </td>
+                    <td>
+                        <php>$ratio = intval($vo['online_time'])/intval(cmf_get_option('realname_settings')['guest_time_limit']);</php>
+                        <if condition="$ratio lt 0.8">
+                            <span class="label label-success">{$vo.online_time}秒</span>
+                        <elseif condition="($ratio egt 0.8) AND ($ratio lt 0.9)"/>
+                            <span class="label label-warning">{$vo.online_time}秒</span>
+                        <else />
+                            <span class="label label-danger">{$vo.online_time}秒</span>
+                        </if>
+                    </td>
+                    <td>
+                        <php>$status = intval(cmf_get_option('realname_settings')['guest_time_limit']) > intval($vo['online_time']) ? "1" : "0";</php>
+                        <if condition="$status eq 1">
+                            <span class="label label-success">正常体验</span>
+                        <else />
+                            <span class="label label-danger">体验结束</span>
+                        </if>
+                    </td>
+                    <td>
+                        <a class="btn btn-xs btn-primary" href="{:url('admin_user/guestedit',array('app_id'=>$vo['app_id'], 'uid'=>$vo['uid']))}">{:lang('EDIT')}</a>
+                        <notempty name="$vo.device_id">
+                            <a class="btn btn-xs btn-danger js-ajax-delete" class="" href="{:url('admin_user/guestdevicedelete',array('app_id'=>$vo['app_id'], 'device_id'=>$vo['device_id']))}">设备解绑</a>
+                        </notempty>
+                    </td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+        <div class="pagination">{$page}</div>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

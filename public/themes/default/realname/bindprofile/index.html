@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+<title>实名认证_{$app.app_name}</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" href="__STATIC__/vendor/weui/2.3.0/style/weui.min.css">
+<link rel="stylesheet" href="__STATIC__/vendor/jquery-weui/1.2.1/css/jquery-weui.min.css">
+<link rel="stylesheet" href="__STATIC__/font-awesome/css/font-awesome.min.css?page=index">
+<style>
+.app_logo {
+    width:160px;
+    height:160px;
+    border-radius: 80px;
+}
+.realname_site_title {
+    text-align: center;
+    padding: 40px 0 10px 0;
+    font-size: 1.0rem;
+}
+.realname_msg {
+    padding: 0px 20px 10px;
+    text-align: left;
+    font-size: 16px;
+    color: #909090;
+}
+.realname_form {
+    padding: 0 20px;
+}
+.realname_form .weui-cell:before {
+    left: 0;
+}
+.realname_form .weui-cell {
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    padding: 10px 10px;
+}
+.realname_form .weui-input {
+    height: 32px;
+}
+.realname_form .weui-btn-area {
+    margin: 1.17647059em 0px .6em;
+}
+.input_icon {
+    display: block;
+    width:36px;
+    height:26px;
+    font: normal normal normal 22px/1 FontAwesome;
+    text-align: center;
+    vertical-align: middle;
+    margin-right: 5px;
+    padding: 3px 2px;
+    color: #909090;
+}
+.realname-btn {
+    width: 100%;
+}
+</style>
+</head>
+<body ontouchstart>
+<div class="realname_site_title">
+    <empty name="app.app_icon">
+        <img class="app_logo" src="__STATIC__/images/default-icon.png"/>
+    <else/>
+        <img class="app_logo" src="/upload/{$app.app_icon}"/>
+    </empty>
+</div>
+<div>
+    <p class="realname_msg">根据国家新闻出版署《关于防止未成年人沉迷网络游戏的通知》的相关要求，网络游戏用户需要使用有效身份证进行实名认证。</p>
+</div>
+<div class="realname_form">
+    <form id="frmSubmit" method="post" class="form-horizontal" action="{:url('bindprofile/profilePost')}">
+        <div class="weui-cells" style="margin-top: 10px;">
+            <div class="weui-cell">
+                <span class="input_icon fa fa-user-circle"></span>
+                <div class="weui-cell__bd">
+                    <input type="text" id="input-real-name" name="real_name" class="weui-input my-input" placeholder="真实姓名" maxlength="20" />
+                </div>
+            </div>
+            <div class="weui-cell">
+                <span class="input_icon fa fa-id-card"></span>
+                <div class="weui-cell__bd">
+                    <input type="text" id="input-idcard" name="idcard" class="weui-input my-input" placeholder="身份证号" maxlength="18" />
+                </div>
+            </div>
+        </div>
+        <div class="weui-btn-area">
+            <input type="hidden" name="appId" value="{$Request.get.appId}" />
+            <input type="hidden" name="uid" value="{$Request.get.uid}" />
+            <input type="hidden" name="sessionId" value="{$Request.get.sessionId}" />
+            <input type="hidden" name="deviceId" value="{$Request.get.deviceId}" />
+            <button type="submit" class="weui-btn weui-btn_primary realname-btn">确定 实名认证</button>
+            <button type="button" id="btnBack" class="weui-btn realname-btn">返回游戏</button>
+        </div>
+    </form>
+</div>
+<script src="__STATIC__/js/jquery.js"></script>
+<script src="__STATIC__/vendor/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+<script src="__STATIC__/js/fastclick.js"></script>
+<script src="__STATIC__/js/ajaxForm.js"></script>
+<script>
+    $(document).ready(function() {
+        FastClick.attach(document.body);
+    });
+    $("#frmSubmit").ajaxForm({
+        dataType: 'json',
+        success: function(data) {
+            console.log(data.code);
+            if (data.code == "1") {
+                $.toast("实名认证成功");
+                $('#input-real-name').attr('readonly', 'readonly');
+                $('#input-idcard').attr('readonly', 'readonly');
+                window.setTimeout(function() {
+                    window.location.href = data.url;
+                }, 2000);
+            } else {
+                $.toast(data.msg, "cancel");
+            }
+        }
+    });
+    $('#btnBack').on('click', function() {
+        window.location.href = "{:url('Bindprofile/directReturn', ['appId' => $Request.get.appId, 'uid' => $Request.get.uid, 'sessionId' => $Request.get.sessionId, 'deviceId' => $Request.get.deviceId]);}";
+    });
+</script>
+</body>
+</html>

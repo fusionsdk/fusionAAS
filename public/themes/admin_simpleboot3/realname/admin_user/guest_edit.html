@@ -1,0 +1,46 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('admin_user/guestIndex')}">游客管理</a></li>
+        <li class="active"><a>编辑游客</a></li>
+    </ul>
+    <form class="form-horizontal js-ajax-form margin-top-20" action="{:url('admin_user/guestEditPost')}" method="post">
+        <div class="form-group">
+            <label for="input-app-name" class="col-sm-2 control-label">应用名称</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-app-name" name="app_name" value="{$app.app_name}" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-uid" class="col-sm-2 control-label">帐号ID</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-uid" name="uid" value="{$data.uid}" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-session-id" class="col-sm-2 control-label">Session ID</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-session-id" name="session_id" value="{$data.session_id}" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-online-time" class="col-sm-2 control-label"><span class="form-required">*</span>累计在线时长</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" id="input-online-time" name="online_time" value="{$data.online_time}">
+                <p class="help-block">单位(秒)</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="hidden" name="app_id" value="{$data.app_id}"/>
+                <button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
+                <a class="btn btn-default" href="{:url('admin_user/guestIndex')}">{:lang('BACK')}</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

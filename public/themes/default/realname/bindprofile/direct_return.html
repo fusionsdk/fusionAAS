@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<title>返回游戏_{$app.app_name}</title>
+</head>
+<body>
+<script>
+window.onerror = function(err) {
+    console.log('window.onerror: ' + err);
+}
+
+function connectWebViewJavascriptBridge(callback) {
+    if (window.WebViewJavascriptBridge) {
+        callback(WebViewJavascriptBridge);
+    } else {
+        document.addEventListener('WebViewJavascriptBridgeReady', function() {
+            callback(WebViewJavascriptBridge)
+        }, false);
+    }
+}
+
+connectWebViewJavascriptBridge(function(bridge) {
+    bridge.callHandler('bindProfileAndReturnStatus', <php>echo json_encode($status);</php>, function(response) {
+        console.log('JS got response', response);
+    });
+})
+</script>
+</body>
+</html>

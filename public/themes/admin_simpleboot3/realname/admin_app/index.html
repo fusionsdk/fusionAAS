@@ -1,0 +1,70 @@
+<include file="public@header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:url('admin_app/index')}">应用管理</a></li>
+			<li><a href="{:url('admin_app/appAdd')}">添加应用</a></li>
+		</ul>
+		<form method="post" class="margin-top-20">
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th width="80">应用图标</th>
+						<th>应用名称</th>
+						<th width="200">App ID</th>
+						<th width="200">App Secret</th>
+                        <th width="120" align="left">实名认证状态</th>
+                        <th width="120" align="left">防沉迷状态</th>
+                        <th width="120" align="left">充值统计方式</th>
+						<th width="160">{:lang('ACTIONS')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<foreach name="apps" item="vo">
+					<tr>
+						<td align="center">
+							<empty name="vo.app_icon">
+								<img width="25" height="25" src="__STATIC__/images/default-icon.png"/>
+							<else/>
+								<img width="25" height="25" src="/upload/{$vo.app_icon}"/>
+							</empty>
+						</td>
+						<td>{$vo.app_name}</td>
+						<td>{$vo.app_id}</td>
+						<td>{$vo.app_secret}</td>
+						<td>
+							<if condition="$vo['realname_status'] eq 1">
+								<span class="label label-success">已启用</span>
+							<else />
+								<span class="label label-danger">已禁用</span>
+							</if>
+                        </td>
+                        <td>
+							<if condition="$vo['fatigue_status'] eq 1">
+								<span class="label label-success">已启用</span>
+							<else />
+								<span class="label label-danger">已禁用</span>
+							</if>
+                        </td>
+                        <td>
+							<if condition="$vo['recharge_status'] eq 1">
+								<span class="label label-success">服务器查询</span>
+							<else />
+								<span class="label label-info">客户端上报</span>
+							</if>
+						</td>
+						<td>
+                            <a class="btn btn-xs btn-primary" href="{:url('admin_app/appedit',array('app_id'=>$vo['app_id']))}">{:lang('EDIT')}</a>
+                            <a class="btn btn-xs btn-danger js-ajax-delete" class="" href="{:url('admin_app/appdelete',array('app_id'=>$vo['app_id']))}">{:lang('DELETE')}</a>
+						</td>
+					</tr>
+					</foreach>
+				</tbody>
+			</table>
+			<div class="pagination">{$page}</div>
+		</form>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a>实名用户管理</a></li>
+    </ul>
+    <form class="well form-inline margin-top-20" method="post" action="{:url('admin_user/userIndex')}">
+        帐号ID：
+        <input class="form-control" type="text" name="uid" style="width: 160px;" value="{:input('request.uid')}"
+               placeholder="请输入帐号ID">
+        姓名：
+        <input class="form-control" type="text" name="real_name" style="width: 160px;" value="{:input('request.real_name')}"
+                placeholder="请输入姓名">
+        身份证：
+        <input class="form-control" type="text" name="idcard" style="width: 160px;" value="{:input('request.idcard')}"
+                placeholder="请输入身份证">
+        应用：
+        <select class="form-control" name="app_id" style="width: 200px;">
+            <option value="">--- 所有 ---</option>
+            <foreach name="apps" item="vo">
+                <php>$app_selected = input('request.app_id') == $vo['app_id'] ? "selected" : "";</php>
+                <option value="{$vo.app_id}" {$app_selected}>{$vo.app_name}</option>
+            </foreach>
+        </select>
+        <input type="submit" class="btn btn-primary" value="搜索"/>
+    </form>
+    <form method="post" class="js-ajax-form">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>应用</th>
+                <th>帐号ID</th>
+                <th>姓名</th>
+                <th>身份证</th>
+                <th>年龄</th>
+                <th>性别</th>
+                <th>创建时间</th>
+                <th>最新连接时间</th>
+                <th>今日在线时长</th>
+                <th>最新充值时间</th>
+                <th>当月累计充值</th>
+                <th>状态</th>
+                <th width="120">{:lang('ACTIONS')}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <foreach name="users" item="vo">
+                <tr>
+                    <td>
+                        <php>$app_name = $vo['app_name'] == '' ? $vo['app_id'] : $vo['app_name'];</php>
+                        <small>{$app_name}</small>
+                    </td>
+                    <td><small>{$vo.uid}</small></td>
+                    <td><small>{$vo.real_name}</small></td>
+                    <td><small>{$vo.idcard}</small></td>
+                    <td>
+                        <php>
+                            $manager = new util\IDCardMgr();
+                            $age = $manager->age($vo['idcard']);
+                            $sex = $manager->sex($vo['idcard']);
+                        </php>
+                        <if condition="($age egt 0) AND ($age lt 8)">
+                            <span class="label label-danger">{$age}岁</span>
+                        <elseif condition="($age egt 8) AND ($age lt 18)"/>
+                            <span class="label label-warning">{$age}岁</span>
+                        <else />
+                            <span class="label label-success">{$age}岁</span>
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$sex eq 1">
+                            <small>男</small>
+                        <else />
+                            <small>女</small>
+                        </if>
+                    </td>
+                    <td>
+                        <small>{:date('Y-m-d H:i:s',$vo['create_time'])}</small>
+                        <php>if (date('Y-m-d') == date('Y-m-d',$vo['create_time'])) echo ' <span class="badge" style="background-color:#E74C3C;">今</span>';</php>
+                    </td>
+                    <td>
+                        <small>{:date('Y-m-d H:i:s',$vo['update_time'])}</small>
+                        <php>if (date('Y-m-d') == date('Y-m-d',$vo['update_time'])) echo ' <span class="badge" style="background-color:#E74C3C;">今</span>';</php>
+                    </td>
+                    <td>
+                        <php>
+                            $manager_f = new util\FatigueMgr();
+
+                            $onlineLimit = $manager_f->getOnlineTimeLimitDaily($vo['idcard']);
+                            $payLimit = $manager_f->getPayLimitMonthly($vo['idcard']);
+                            $playFlag = $manager_f->vaildOnlineStatus($vo['app_id'], $vo['idcard'], $vo['online_time']);
+                            
+                            $ratioOnline = 0.00;
+                            if (date('Y-m-d') == date('Y-m-d', $vo['update_time']) && !empty($vo['online_time']) && $onlineLimit > 0)
+                            {
+                                $ratioOnline = intval($vo['online_time'])/$onlineLimit;
+                            }
+
+                            $ratioPay = 0.00;
+                            if (!empty($vo['pay_monthly']) && date('Y-m') == date('Y-m', $vo['utime']) && $payLimit > 0)
+                            {
+                                $ratioPay = intval($vo['pay_monthly'])/$payLimit;
+                            }
+                        </php>
+                        <if condition="$onlineLimit eq 0">
+                            <span class="label label-danger">限制游戏</span>
+                        <elseif condition="$onlineLimit eq -1"/>
+                            <span class="label label-success">不限时长</span>
+                        <else />
+                            <if condition="($ratioOnline gt 0) AND ($ratioOnline lt 0.8)">
+                                <span class="label label-success">{$vo.online_time}秒</span>
+                            <elseif condition="($ratioOnline egt 0.8) AND ($ratioOnline lt 0.9)"/>
+                                <span class="label label-warning">{$vo.online_time}秒</span>
+                            <elseif condition="$ratioOnline egt 0.9"/>
+                                <span class="label label-danger">{$vo.online_time}秒</span>
+                            <else />
+                                <span class="label label-success">0秒</span>
+                            </if>
+                        </if>
+                    </td>
+                    <td>
+                        <small>{:date('Y-m-d H:i:s',$vo['utime'])}</small>
+                        <php>if (date('Y-m') == date('Y-m',$vo['utime'])) echo ' <span class="badge" style="background-color:#E74C3C;">月</span>';</php>
+                    </td>
+                    <td>
+                        <if condition="$payLimit eq 0">
+                            <span class="label label-danger">限制充值</span>
+                        <elseif condition="$payLimit eq -1"/>
+                            <span class="label label-success">不限充值</span>
+                        <else />
+                            <if condition="($ratioPay gt 0) AND ($ratioPay lt 0.8)">
+                                <span class="label label-success">{$vo.pay_monthly}元</span>
+                            <elseif condition="($ratioPay egt 0.8) AND ($ratioPay lt 1.0)"/>
+                                <span class="label label-warning">{$vo.pay_monthly}元</span>
+                            <elseif condition="$ratioPay egt 1.0"/>
+                                <span class="label label-danger">{$vo.pay_monthly}元</span>
+                            <else />
+                                <span class="label label-success">0元</span>
+                            </if>
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$playFlag eq true">
+                            <span class="label label-success">正常游戏</span>
+                        <else />
+                            <span class="label label-danger">限制游戏</span>
+                        </if>
+                    </td>
+                    <td>
+                        <a class="btn btn-xs btn-primary" href="{:url('admin_user/useredit',array('app_id'=>$vo['app_id'], 'uid'=>$vo['uid']))}">{:lang('EDIT')}</a>
+                        <a class="btn btn-xs btn-danger js-ajax-delete" class="" href="{:url('admin_user/userdelete',array('app_id'=>$vo['app_id'], 'uid'=>$vo['uid']))}">{:lang('DELETE')}</a>
+                    </td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+        <div class="pagination">{$page}</div>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>
