@@ -173,8 +173,10 @@ class FatigueMgr
         $data = GameHolidayModel::get($dt);
         if (!$data)
         {
-            $wd = date('w', time()); // 星期几
-            return ($wd == 6 || $wd == 0) ? true : false;
+            // $wd = date('w', time()); // 星期几
+            // return ($wd == 6 || $wd == 0) ? true : false;
+			// Modified by stozen (2020-11-04) 周六周日非节假日
+            return false;
         }
         else
         {
