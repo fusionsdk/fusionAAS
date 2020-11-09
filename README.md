@@ -8,7 +8,7 @@ fusionAAS 手游实名认证&防沉迷系统
 - 服务端demo: [http://demo.aas.fusionsdk.com/admin/](http://demo.aas.fusionsdk.com/admin/) `(帐号密码都是demo)`
 - 安卓客户端demo: [https://gitee.com/fusionsdk/fusionAAS-android-demo](https://gitee.com/fusionsdk/fusionAAS-android-demo)
 - H5客户端demo: 敬请期待
-- 使用文档: [https://fusionsdk.com/docs/fusionaas.html](https://fusionsdk.com/docs/fusionaas.html)
+- 使用文档: [https://www.kancloud.cn/fusionsdk/aas_doc_1/1711199](https://www.kancloud.cn/fusionsdk/aas_doc_1/1711199)
 
 ### 系统功能
 
