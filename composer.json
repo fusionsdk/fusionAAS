@@ -40,5 +40,10 @@
             "type": "composer",
             "url": "https://mirrors.aliyun.com/composer/"
         }
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "git clone -b 5.1 --depth=1 --recursive https://gitee.com/liu21st/framework.git ./vendor/thinkphp"
+        ]
     }
 }
