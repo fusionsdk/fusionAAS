@@ -274,6 +274,7 @@ class AdminUserController extends AdminBaseController
             ->view(['game_user_recharge' => 'r'], 'pay_monthly', 'r.app_id=u.app_id and r.uid=u.uid', 'LEFT')
             ->where('u.app_id', $app_id)
             ->where('u.uid', $uid) 
+            ->where('u.user_type', 1) 
             ->select();
         if (!$data) {
             $this->error("该实名用户不存在！");
