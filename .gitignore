@@ -15,3 +15,4 @@
 Vagrantfile
 .vagrant
 composer.lock
+.env
