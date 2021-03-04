@@ -42,11 +42,15 @@ class FatigueMgr
 
         // 判断年龄等级
         $ageLevel = $this->ageLevel($idCard);
-        if ($ageLevel == '0')
-        {
-            return false;
-        }
-        else if ($ageLevel == '3')
+        // if ($ageLevel == '0')
+        // {
+        //     return false;
+        // }
+        // else if ($ageLevel == '3')
+        // {
+        //     return true;
+        // }
+        if ($ageLevel == '3')
         {
             return true;
         }
@@ -261,11 +265,15 @@ class FatigueMgr
     public function getOnlineTimeLimitDaily($idCard)
     {
         $ageLevel = $this->ageLevel($idCard);
-        if ($ageLevel == '0')
-        {
-            return 0;
-        }
-        else if ($ageLevel == '3')
+        // if ($ageLevel == '0')
+        // {
+        //     return 0;
+        // }
+        // else if ($ageLevel == '3')
+        // {
+        //     return -1;
+        // }
+        if ($ageLevel == '3')
         {
             return -1;
         }
@@ -440,13 +448,14 @@ class FatigueMgr
         );
 
         $ageLevel = $this->ageLevel($idCard);
-        if ($ageLevel == '0') // 8岁以下
-        {
-            // 返回
-            $status['level'] = 2;
-            return $status;
-        }
-        else if ($ageLevel == '3') // 成年人
+        // if ($ageLevel == '0') // 8岁以下
+        // {
+        //     // 返回
+        //     $status['level'] = 2;
+        //     // return $status;
+        // }
+        // else if ($ageLevel == '3') // 成年人
+        if ($ageLevel == '3') // 成年人
         {
             // 返回
             $status['level'] = 1;
@@ -467,7 +476,7 @@ class FatigueMgr
             $status['level'] = 4;
         }
 
-        // 未成年8-17岁
+        // 未成年0-17岁
         if ($this->forbiddenTimeRangeStatus()) // 限制时间
         {
             $status['status'] = 2; // 限制时间踢线
@@ -602,6 +611,14 @@ class FatigueMgr
                 // 返回
                 $status['surplus_money_monthly'] = $status['recharge_limit_monthly'];
             }
+        }
+
+        if ($ageLevel == '0') // 8岁以下
+        {
+            $status['level'] = 2;
+            $status['surplus_money_monthly'] = 0;
+            $status['once_recharge_limit'] = $this->getPayLimitOnce($idCard);
+            $status['recharge_limit_monthly'] = $this->getPayLimitMonthly($idCard);
         }
 
         return $status;
