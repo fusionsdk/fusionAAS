@@ -17,7 +17,7 @@
                             <div class="col-md-6 col-sm-10">
                                 <input type="text" class="form-control" id="input-guest-time-limit" name="options[guest_time_limit]"
                                        value="{$realname_settings.guest_time_limit|default=''}">
-                                <p class="help-block">纯数字，单位(秒)</p>
+                                <p class="help-block">纯数字，单位(秒)；不限制填-1</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -26,25 +26,88 @@
                             <div class="col-md-6 col-sm-10">
                                 <input type="text" class="form-control" id="input-guest-replay-limit" name="options[guest_replay_limit]"
                                        value="{$realname_settings.guest_replay_limit|default=''}">
-                                <p class="help-block">纯数字，单位(秒)</p>
+                                <p class="help-block">纯数字，单位(秒)；不限制填-1</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="input-young-forbidden-timerange" class="col-sm-2 control-label"><span
-                                    class="form-required">*</span>未成年人禁止游戏时间段</label>
+                                    class="form-required">*</span>未成年人禁止游戏时间段(星期一)</label>
                             <div class="col-md-6 col-sm-10">
-                                <input type="text" class="form-control" id="input-young-forbidden-timerange" name="options[young_forbidden_timerange]"
-                                       value="{$realname_settings.young_forbidden_timerange|default=''}">
-                                <p class="help-block">格式为"22:00-23:59,00:00-07:59"可以多个时段，每个时段使用逗号分隔</p>
+                                <input type="text" class="form-control" id="input-young-forbidden-timerange_monday" name="options[young_forbidden_timerange_monday]"
+                                       value="{$realname_settings.young_forbidden_timerange_monday|default=''}">
+                                <p class="help-block">格式为"22:00:00-23:59:59,00:00:00-07:59:59"可以多个时段，每个时段使用逗号分隔；不禁止填-1</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-young-forbidden-timerange" class="col-sm-2 control-label"><span
+                                    class="form-required">*</span>未成年人禁止游戏时间段(星期二)</label>
+                            <div class="col-md-6 col-sm-10">
+                                <input type="text" class="form-control" id="input-young-forbidden-timerange_tuesday" name="options[young_forbidden_timerange_tuesday]"
+                                       value="{$realname_settings.young_forbidden_timerange_tuesday|default=''}">
+                                <p class="help-block">格式为"22:00:00-23:59:59,00:00:00-07:59:59"可以多个时段，每个时段使用逗号分隔；不禁止填-1</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-young-forbidden-timerange" class="col-sm-2 control-label"><span
+                                    class="form-required">*</span>未成年人禁止游戏时间段(星期三)</label>
+                            <div class="col-md-6 col-sm-10">
+                                <input type="text" class="form-control" id="input-young-forbidden-timerange_wednesday" name="options[young_forbidden_timerange_wednesday]"
+                                       value="{$realname_settings.young_forbidden_timerange_wednesday|default=''}">
+                                <p class="help-block">格式为"22:00:00-23:59:59,00:00:00-07:59:59"可以多个时段，每个时段使用逗号分隔；不禁止填-1</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-young-forbidden-timerange" class="col-sm-2 control-label"><span
+                                    class="form-required">*</span>未成年人禁止游戏时间段(星期四)</label>
+                            <div class="col-md-6 col-sm-10">
+                                <input type="text" class="form-control" id="input-young-forbidden-timerange_thursday" name="options[young_forbidden_timerange_thursday]"
+                                       value="{$realname_settings.young_forbidden_timerange_thursday|default=''}">
+                                <p class="help-block">格式为"22:00:00-23:59:59,00:00:00-07:59:59"可以多个时段，每个时段使用逗号分隔；不禁止填-1</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-young-forbidden-timerange" class="col-sm-2 control-label"><span
+                                    class="form-required">*</span>未成年人禁止游戏时间段(星期五)</label>
+                            <div class="col-md-6 col-sm-10">
+                                <input type="text" class="form-control" id="input-young-forbidden-timerange_friday" name="options[young_forbidden_timerange_friday]"
+                                       value="{$realname_settings.young_forbidden_timerange_friday|default=''}">
+                                <p class="help-block">格式为"22:00:00-23:59:59,00:00:00-07:59:59"可以多个时段，每个时段使用逗号分隔；不禁止填-1</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-young-forbidden-timerange" class="col-sm-2 control-label"><span
+                                    class="form-required">*</span>未成年人禁止游戏时间段(星期六)</label>
+                            <div class="col-md-6 col-sm-10">
+                                <input type="text" class="form-control" id="input-young-forbidden-timerange_saturday" name="options[young_forbidden_timerange_saturday]"
+                                       value="{$realname_settings.young_forbidden_timerange_saturday|default=''}">
+                                <p class="help-block">格式为"22:00:00-23:59:59,00:00:00-07:59:59"可以多个时段，每个时段使用逗号分隔；不禁止填-1</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-young-forbidden-timerange" class="col-sm-2 control-label"><span
+                                    class="form-required">*</span>未成年人禁止游戏时间段(星期日)</label>
+                            <div class="col-md-6 col-sm-10">
+                                <input type="text" class="form-control" id="input-young-forbidden-timerange_sunday" name="options[young_forbidden_timerange_sunday]"
+                                       value="{$realname_settings.young_forbidden_timerange_sunday|default=''}">
+                                <p class="help-block">格式为"22:00:00-23:59:59,00:00:00-07:59:59"可以多个时段，每个时段使用逗号分隔；不禁止填-1</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-young-forbidden-timerange" class="col-sm-2 control-label"><span
+                                    class="form-required">*</span>未成年人禁止游戏时间段(法定节假日)</label>
+                            <div class="col-md-6 col-sm-10">
+                                <input type="text" class="form-control" id="input-young-forbidden-timerange_holiday" name="options[young_forbidden_timerange_holiday]"
+                                       value="{$realname_settings.young_forbidden_timerange_holiday|default=''}">
+                                <p class="help-block">格式为"22:00:00-23:59:59,00:00:00-07:59:59"可以多个时段，每个时段使用逗号分隔；不禁止填-1</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="input-young-time-limit-weekday" class="col-sm-2 control-label"><span
-                                    class="form-required">*</span>未成年人可游戏时长(非法定节假日)</label>
+                                    class="form-required">*</span>未成年人可游戏时长(工作日)</label>
                             <div class="col-md-6 col-sm-10">
                                 <input type="text" class="form-control" id="input-young-time-limit-weekday" name="options[young_time_limit_weekday]"
                                        value="{$realname_settings.young_time_limit_weekday|default=''}">
-                                <p class="help-block">纯数字，单位(秒)</p>
+                                <p class="help-block">纯数字，单位(秒)；不限制填-1</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -53,7 +116,16 @@
                             <div class="col-md-6 col-sm-10">
                                 <input type="text" class="form-control" id="input-young-time-limit-holiday" name="options[young_time_limit_holiday]"
                                        value="{$realname_settings.young_time_limit_holiday|default=''}">
-                                <p class="help-block">纯数字，单位(秒)</p>
+                                <p class="help-block">纯数字，单位(秒)；不限制填-1</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-young2-pay-limit-once" class="col-sm-2 control-label"><span
+                                    class="form-required">*</span>单次购买限制(小于8周岁)</label>
+                            <div class="col-md-6 col-sm-10">
+                                <input type="text" class="form-control" id="input-young1-pay-limit-once" name="options[young1_pay_limit_once]"
+                                       value="{$realname_settings.young1_pay_limit_once|default=''}">
+                                <p class="help-block">带2位小数，单位(元)；不限制填-1</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -62,16 +134,7 @@
                             <div class="col-md-6 col-sm-10">
                                 <input type="text" class="form-control" id="input-young2-pay-limit-once" name="options[young2_pay_limit_once]"
                                        value="{$realname_settings.young2_pay_limit_once|default=''}">
-                                <p class="help-block">带2位小数，单位(元)</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="input-young2-pay-limit-monthly" class="col-sm-2 control-label"><span
-                                    class="form-required">*</span>每月购买限制(8-16周岁)</label>
-                            <div class="col-md-6 col-sm-10">
-                                <input type="text" class="form-control" id="input-young2-pay-limit-monthly" name="options[young2_pay_limit_monthly]"
-                                       value="{$realname_settings.young2_pay_limit_monthly|default=''}">
-                                <p class="help-block">带2位小数，单位(元)</p>
+                                <p class="help-block">带2位小数，单位(元)；不限制填-1</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -80,7 +143,25 @@
                             <div class="col-md-6 col-sm-10">
                                 <input type="text" class="form-control" id="input-young3-pay-limit-once" name="options[young3_pay_limit_once]"
                                        value="{$realname_settings.young3_pay_limit_once|default=''}">
-                                <p class="help-block">带2位小数，单位(元)</p>
+                                <p class="help-block">带2位小数，单位(元)；不限制填-1</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-young2-pay-limit-monthly" class="col-sm-2 control-label"><span
+                                    class="form-required">*</span>每月购买限制(小于8周岁)</label>
+                            <div class="col-md-6 col-sm-10">
+                                <input type="text" class="form-control" id="input-young1-pay-limit-monthly" name="options[young1_pay_limit_monthly]"
+                                       value="{$realname_settings.young1_pay_limit_monthly|default=''}">
+                                <p class="help-block">带2位小数，单位(元)；不限制填-1</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-young2-pay-limit-monthly" class="col-sm-2 control-label"><span
+                                    class="form-required">*</span>每月购买限制(8-16周岁)</label>
+                            <div class="col-md-6 col-sm-10">
+                                <input type="text" class="form-control" id="input-young2-pay-limit-monthly" name="options[young2_pay_limit_monthly]"
+                                       value="{$realname_settings.young2_pay_limit_monthly|default=''}">
+                                <p class="help-block">带2位小数，单位(元)；不限制填-1</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -89,7 +170,7 @@
                             <div class="col-md-6 col-sm-10">
                                 <input type="text" class="form-control" id="input-young3-pay-limit-monthly" name="options[young3_pay_limit_monthly]"
                                        value="{$realname_settings.young3_pay_limit_monthly|default=''}">
-                                <p class="help-block">带2位小数，单位(元)</p>
+                                <p class="help-block">带2位小数，单位(元)；不限制填-1</p>
                             </div>
                         </div>
                         <div class="form-group">

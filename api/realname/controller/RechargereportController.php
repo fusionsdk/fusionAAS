@@ -68,7 +68,7 @@ class RechargereportController extends RestBaseController
             $this->error("未成年人充值超过单次限额！");
         }
         $limitMonthly = $manager->getPayLimitMonthly($user->idcard);
-        if ($money > $limitMonthly)
+        if ($limitMonthly != -1 && $money > $limitMonthly)
         {
             $this->error("未成年人充值超过本月限额！");
         }

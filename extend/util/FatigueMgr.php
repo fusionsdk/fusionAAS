@@ -42,14 +42,7 @@ class FatigueMgr
 
         // 判断年龄等级
         $ageLevel = $this->ageLevel($idCard);
-        // if ($ageLevel == '0')
-        // {
-        //     return false;
-        // }
-        // else if ($ageLevel == '3')
-        // {
-        //     return true;
-        // }
+        // 成年人没有限制
         if ($ageLevel == '3')
         {
             return true;
@@ -60,7 +53,7 @@ class FatigueMgr
             return false;
         }
 
-        // 判断是否是休息日
+        // 判断是否超过每日时长
         if ($this->isRestDay()) {
             return !$this->isOverLimitTimeToday(true, $onlineTime);
         } else {
@@ -123,9 +116,45 @@ class FatigueMgr
     private function forbiddenTimeRangeStatus()
     {
         $flag = false;
-        // 获取配置
-        $range = cmf_get_option('realname_settings')['young_forbidden_timerange'];
-        if (empty($range))
+        $range = "";
+        // 判断是否是法定节假日
+        if ($this->isRestDay())
+        {
+            // 获取配置
+            $range = cmf_get_option('realname_settings')['young_forbidden_timerange_holiday'];
+        }
+        else
+        {
+            // 获取星期几
+            $wd = date("w");
+            // 获取配置
+            switch($wd)
+            {
+                case 0:
+                    $range = cmf_get_option('realname_settings')['young_forbidden_timerange_sunday'];
+                    break;
+                case 1:
+                    $range = cmf_get_option('realname_settings')['young_forbidden_timerange_monday'];
+                    break;
+                case 2:
+                    $range = cmf_get_option('realname_settings')['young_forbidden_timerange_tuesday'];
+                    break;
+                case 3:
+                    $range = cmf_get_option('realname_settings')['young_forbidden_timerange_wednesday'];
+                    break;
+                case 4:
+                    $range = cmf_get_option('realname_settings')['young_forbidden_timerange_thursday'];
+                    break;
+                case 5:
+                    $range = cmf_get_option('realname_settings')['young_forbidden_timerange_friday'];
+                    break;
+                case 6:
+                    $range = cmf_get_option('realname_settings')['young_forbidden_timerange_saturday'];
+                    break;
+            } 
+        }
+        
+        if (empty($range) || $range == "-1")
         {
             return $flag;
         }
@@ -146,18 +175,18 @@ class FatigueMgr
     }
 
     /**
-     * 判断当前的时分是否在指定的时间段内
+     * 判断当前的时分秒是否在指定的时间段内
      * 
-     * @param $start 开始时分  eg:10:30
-     * @param $end  结束时分   eg:15:30
+     * @param $start 开始时分秒  eg:10:30:50
+     * @param $end  结束时分秒   eg:15:30:59
      * @return: boolean  1：在范围内，0:没在范围内
      */
     private function checkIsBetweenTime($start, $end)
     {
-        $date = date('H:i');
-        $curTime = strtotime($date); //当前时分
-        $assignTime1 = strtotime($start); //获得指定分钟时间戳，00:00
-        $assignTime2 = strtotime($end); //获得指定分钟时间戳，01:00
+        $date = date('H:i:s');
+        $curTime = strtotime($date); //当前时分秒
+        $assignTime1 = strtotime($start); //获得指定分钟时间戳，00:00:00
+        $assignTime2 = strtotime($end); //获得指定分钟时间戳，01:00:00
         $result = false;
         if ($curTime >= $assignTime1 && $curTime <= $assignTime2){
             $result = true;
@@ -166,7 +195,7 @@ class FatigueMgr
     }
 
     /**
-     * 判断是否是休息日
+     * 判断是否是法定节假日
      * 
      * @return: boolean
      */
@@ -191,7 +220,7 @@ class FatigueMgr
     /**
      * 判断当日游戏时长是否超过限制
      * 
-     * @param $restFlag boolean true:休息日 false:工作日
+     * @param $restFlag boolean true:法定节假日 false:工作日
      * @param $onlineTime int 在线时长
      * @return: boolean
      */
@@ -199,6 +228,10 @@ class FatigueMgr
     {
         $limitTime = $restFlag ? intval(cmf_get_option('realname_settings')['young_time_limit_holiday'])
                                 : intval(cmf_get_option('realname_settings')['young_time_limit_weekday']);
+        if ($limitTime == -1)
+        {
+            return false;
+        }
         return ($onlineTime >= $limitTime) ? true : false;
     }
 
@@ -213,7 +246,7 @@ class FatigueMgr
         $ageLevel = $this->ageLevel($idCard);
         if ($ageLevel == '0')
         {
-            return 0;
+            return floatval(cmf_get_option('realname_settings')['young1_pay_limit_monthly']);
         }
         else if ($ageLevel == '1')
         {
@@ -240,7 +273,7 @@ class FatigueMgr
         $ageLevel = $this->ageLevel($idCard);
         if ($ageLevel == '0')
         {
-            return 0;
+            return floatval(cmf_get_option('realname_settings')['young1_pay_limit_once']);
         }
         else if ($ageLevel == '1')
         {
@@ -265,14 +298,7 @@ class FatigueMgr
     public function getOnlineTimeLimitDaily($idCard)
     {
         $ageLevel = $this->ageLevel($idCard);
-        // if ($ageLevel == '0')
-        // {
-        //     return 0;
-        // }
-        // else if ($ageLevel == '3')
-        // {
-        //     return -1;
-        // }
+        // 成年人不限制
         if ($ageLevel == '3')
         {
             return -1;
@@ -418,7 +444,7 @@ class FatigueMgr
     }
 
     /**
-     * 获取实名用户的反沉迷状态
+     * 获取实名用户的防沉迷状态
      * 
      * @param $appId
      * @param $deviceId
@@ -448,13 +474,6 @@ class FatigueMgr
         );
 
         $ageLevel = $this->ageLevel($idCard);
-        // if ($ageLevel == '0') // 8岁以下
-        // {
-        //     // 返回
-        //     $status['level'] = 2;
-        //     // return $status;
-        // }
-        // else if ($ageLevel == '3') // 成年人
         if ($ageLevel == '3') // 成年人
         {
             // 返回
@@ -466,6 +485,10 @@ class FatigueMgr
             $status['online_limit'] = -1;
             $status['recharge_limit_monthly'] = -1;
             return $status;
+        }
+        else if ($ageLevel == '0') // 小于8岁
+        {
+            $status['level'] = 2;
         }
         else if ($ageLevel == '1') // 8到16岁(未满)
         {
@@ -516,8 +539,14 @@ class FatigueMgr
             // 判断是否同一次登录
             if ($user->session_id != $sessionId) // 不是
             {
+                // 不限制
+                if ($status['online_limit'] == -1)
+                {
+                    $status['status'] = 0;
+                    $status['online_limit'] = -1;
+                }
                 // 超时
-                if ($user->online_time >= $status['online_limit'])
+                elseif ($user->online_time >= $status['online_limit'])
                 {
                     // 返回
                     if ($this->isRestDay())
@@ -543,7 +572,13 @@ class FatigueMgr
             {
                 // 判断是否超时
                 $olt = $user->online_time + (time() - $user->update_time);
-                if ($olt >= $status['online_limit']) // 超时
+                // 不限制
+                if ($status['online_limit'] == -1)
+                {
+                    $status['status'] = 0;
+                    $status['remaining_time'] = -1;
+                }
+                elseif ($olt >= $status['online_limit']) // 超时
                 {
                     $user->update_time = time();
                     $user->online_time = $olt;
@@ -604,7 +639,14 @@ class FatigueMgr
             if (date('Y-m') == date('Y-m', $recharge->update_time)) // 同月
             {
                 // 返回
-                $status['surplus_money_monthly'] = $status['recharge_limit_monthly'] - $recharge->pay_monthly;
+                if ($status['recharge_limit_monthly'] == -1)
+                {
+                    $status['surplus_money_monthly'] = -1;
+                }
+                else
+                {
+                    $status['surplus_money_monthly'] = $status['recharge_limit_monthly'] - $recharge->pay_monthly;
+                }
             }
             else // 不同月
             {
@@ -613,13 +655,13 @@ class FatigueMgr
             }
         }
 
-        if ($ageLevel == '0') // 8岁以下
-        {
-            $status['level'] = 2;
-            $status['surplus_money_monthly'] = 0;
-            $status['once_recharge_limit'] = $this->getPayLimitOnce($idCard);
-            $status['recharge_limit_monthly'] = $this->getPayLimitMonthly($idCard);
-        }
+        // if ($ageLevel == '0') // 8岁以下
+        // {
+        //     $status['level'] = 2;
+        //     $status['surplus_money_monthly'] = 0;
+        //     $status['once_recharge_limit'] = $this->getPayLimitOnce($idCard);
+        //     $status['recharge_limit_monthly'] = $this->getPayLimitMonthly($idCard);
+        // }
 
         return $status;
     }

@@ -61,7 +61,10 @@
                         <php>if (date('Y-m-d') == date('Y-m-d',intval($vo['utime'])+intval(cmf_get_option('realname_settings')['guest_replay_limit']))) echo ' <span class="badge" style="background-color:#E74C3C;">今</span>';</php>
                     </td>
                     <td>
-                        <php>$ratio = intval($vo['online_time'])/intval(cmf_get_option('realname_settings')['guest_time_limit']);</php>
+                        <php>
+                            $ratio = 1;
+                            if (intval(cmf_get_option('realname_settings')['guest_time_limit']) > 0) $ratio = intval($vo['online_time'])/intval(cmf_get_option('realname_settings')['guest_time_limit']);
+                        </php>
                         <if condition="$ratio lt 0.8">
                             <span class="label label-success">{$vo.online_time}秒</span>
                         <elseif condition="($ratio egt 0.8) AND ($ratio lt 0.9)"/>
