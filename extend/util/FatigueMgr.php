@@ -397,8 +397,14 @@ class FatigueMgr
                     'online_time' => 0
                 ]);
             // 返回
-            $status['status'] = 0; // 正常
-            $status['remaining_time'] = $status['online_limit'];
+			if ($status['online_limit'] > 0) {
+				$status['status'] = 0; // 正常
+				$status['remaining_time'] = $status['online_limit'];
+			} else {
+				// 返回
+				$status['status'] = 1; // 踢线
+				$status['remaining_time'] = 0;
+			}
             return $status;
         }
         
